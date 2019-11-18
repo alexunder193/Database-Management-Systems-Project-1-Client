@@ -65,6 +65,14 @@ export function signup(signupRequest) {
     });
 }
 
+export function queries(queryRequest){
+    return request({
+        url: API_BASE_URL + "/query",
+        method: 'POST',
+        body: JSON.stringify(queryRequest)
+    });
+}
+
 export function checkUsernameAvailability(username) {
     return request({
         url: API_BASE_URL + "/user/checkUsernameAvailability?username=" + username,
