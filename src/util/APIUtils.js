@@ -73,6 +73,14 @@ export function queries(queryRequest){
     });
 }
 
+export function insert(insertRequest){
+    return request({
+        url: API_BASE_URL + "/new",
+        method: 'POST',
+        body: JSON.stringify(insertRequest)
+    });
+}
+
 export function checkUsernameAvailability(username) {
     return request({
         url: API_BASE_URL + "/user/checkUsernameAvailability?username=" + username,

@@ -7,6 +7,12 @@ import { withRouter } from 'react-router-dom';
 import DateRangeStart from './DateRangeStart';
 import Drop from './Drop';
 import { InputNumber } from 'antd';
+import Dynamic from './Dynamic';
+import Dynamic1 from './Dynamic1';
+import { insert } from '../util/APIUtils';
+
+var destinations = [];
+var blocks = [];
 
 class Insert extends Component {
 
@@ -23,8 +29,6 @@ class Insert extends Component {
             response: null,
             userAgent: null,
             userId: null,
-            destinationIp: null,
-            blockId: null
         };
         this.whenSubmit = this.whenSubmit.bind(this);
         this.handleInputChange1 = this.handleInputChange1.bind(this);
@@ -37,13 +41,25 @@ class Insert extends Component {
         this.handleInputChange8 = this.handleInputChange8.bind(this);
         this.handleInputChange9 = this.handleInputChange9.bind(this);
         this.handleInputChange10 = this.handleInputChange10.bind(this);
-        this.handleInputChange11 = this.handleInputChange11.bind(this);
-        this.handleInputChange12 = this.handleInputChange12.bind(this);
     }
 
     callbackFunction3 = (childStart) => {
-        console.log("callBack")
+        console.log("callBack3")
         this.setState({timestamp: childStart})
+    }
+
+    callbackFunction4 = (dests) => {
+        console.log("callBack4")
+        console.log("come from child " + dests);
+        destinations=dests;
+        console.log(destinations);
+    }
+
+    callbackFunction5 = (blks) => {
+        console.log("callBack5")
+        console.log("come from child " + blks);
+        blocks = blks;
+        console.log(blocks);
     }
 
     handleInputChange1 = (event) => {
@@ -86,50 +102,44 @@ class Insert extends Component {
         this.setState({userId: event.target.value})
     }
 
-    handleInputChange11(event) {
-        this.setState({destinationIp: event.target.value})
-    }
-
-    handleInputChange12(event) {
-        this.setState({blockId: event.target.value})
-    }
-
-
     whenSubmit(){
-        // const insertRequest = {
-        //     sourceIp: this.state.sourceIp,
-        //     timestamp: this.state.start.format(),
-        //     type: this.state.type,
-        //     size: this.state.size,
-        //     method: this.state.method,
-        //     referer: this.state.referer,
-        //     resource: this.state.resource,
-        //     response: this.state.response,
-        //     userAgent: this.state.userAgent,
-        //     userId: this.state.userId,
-        //     destinationIp: this.state.destinationIp,
-        //     blockId: this.state.blockId
-        // };
+        var filtered = destinations.filter(function (el) {
+            return el != null;
+        });
+        var filtered1 = blocks.filter(function (el) {
+            return el != null;
+        });
         console.log('You are in when Submit')
         console.log(this.state)
-        {/*
-        insert(insertRequest)       //Make a function in Util!!!!!!!!!!!!
-        .then(response => {
-            notification.success({
-                message: 'Log Database App',
-                description: "The result of our query",
-            });          
-            //this.props.history.push("/login");
-        }).catch(error => {
-            notification.error({
-                message: 'Log Database App',
-                description: error.message || 'Sorry! Something went wrong. Please try again!'
+        console.log(filtered)
+        console.log(filtered1)
+        const insertRequest = {
+            sourceIp: this.state.sourceIp,
+            timestamp: this.state.timestamp.format(),
+            type: this.state.type,
+            size: this.state.size,
+            method: this.state.method,
+            referer: this.state.referer,
+            resource: this.state.resource,
+            response: this.state.response,
+            userAgent: this.state.userAgent,
+            userId: this.state.userId,
+            destinationIp: filtered,
+            blockId: filtered1
+        };
+        insert(insertRequest)
+            .then(response => {
+                notification.success({
+                    message: 'Log Database App',
+                    description: "Insertion completed successfully",
+                });
+            }).catch(error => {
+                notification.error({
+                    message: 'Log Database App',
+                    description: error.message || 'Sorry! Something went wrong. Please try again!'
+                });
             });
-        });
-        // console.log(this.state.timstamp.format())
-        // console.log(this.state.end.format())
-    // console.log(this.state.type)  */}
-}
+    }
 
 
     render() {
@@ -144,7 +154,7 @@ class Insert extends Component {
                     <br/><br/>
                         <Input style ={{width: "200px"}}placeholder="Type" onChange={this.handleInputChange3}/>
                     <br/><br/>
-                    <Input style ={{width: "200px"}}placeholder="Size" onChange={this.handleInputChange4}/>
+                    <input placeholder="Size" type="number" onChange={this.handleInputChange4}/>
                     <br/><br/>
                         <Input style ={{width: "200px"}}placeholder="Method" onChange={this.handleInputChange5}/>
                     <br/><br/>
@@ -152,17 +162,18 @@ class Insert extends Component {
                     <br/><br/>
                         <Input style ={{width: "200px"}}placeholder="Resource" onChange={this.handleInputChange7}/>
                     <br/><br/>
-                    <Input style ={{width: "200px"}}placeholder="Response" onChange={this.handleInputChange8}/>
+                    <input placeholder="Response" type="number" onChange={this.handleInputChange8}/>
                     <br/><br/>
                         <Input style ={{width: "200px"}}placeholder="User Agent" onChange={this.handleInputChange9}/>
                     <br/><br/>
                         <Input style ={{width: "200px"}}placeholder="User Id" onChange={this.handleInputChange10}/>
                     <br/><br/>
-                        <Input style ={{width: "200px"}}placeholder="Destination" onChange={this.handleInputChange11}/>
+                    <p>Destination</p>
+                    <Dynamic parentCallback = {this.callbackFunction4} />
+                    <p>Block</p>
+                    <Dynamic1 parentCallback1 = {this.callbackFunction5} />
                     <br/><br/>
-                        <Input style ={{width: "200px"}}placeholder="Block Id" onChange={this.handleInputChange12}/>
-                    <br/><br/>
-                    <Button type="primary" onClick={this.whenSubmit}>Submit</Button>
+                    <Button type="primary" onClick={this.whenSubmit}>Submit All</Button>
 
                 </div>
             );
