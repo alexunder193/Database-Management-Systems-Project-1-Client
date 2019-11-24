@@ -81,6 +81,14 @@ export function insert(insertRequest){
     });
 }
 
+export function searchIp(searchIpRequest){
+    return request({
+        url: API_BASE_URL + "/search",
+        method: 'POST',
+        body: JSON.stringify(searchIpRequest)
+    });
+}
+
 export function checkUsernameAvailability(username) {
     return request({
         url: API_BASE_URL + "/user/checkUsernameAvailability?username=" + username,

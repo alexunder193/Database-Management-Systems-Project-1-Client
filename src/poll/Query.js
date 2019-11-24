@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { queries } from '../util/APIUtils';
+import { queries, searchIp } from '../util/APIUtils';
 import LoadingIndicator from '../common/LoadingIndicator';
-import { Button, Icon, notification } from 'antd';
+import { Button, Icon, notification, Input } from 'antd';
 import { withRouter } from 'react-router-dom';
 import DateRange from './DateRange';
 import DateRangeStart from './DateRangeStart';
@@ -16,11 +16,17 @@ class Query extends Component {
             end: null,
             word: null,
             type: null,
-            listArray:[]
+            listArray:[],
+            sourceIp: null,
+            destinationIp: null,
+            searchIpArray:[]
         };
         this.whenSubmit = this.whenSubmit.bind(this);
         this.whenSubmit1 = this.whenSubmit1.bind(this);
         this.whenSubmit2 = this.whenSubmit2.bind(this);
+        this.whenSubmit3 = this.whenSubmit3.bind(this);
+        this.handleInputChange1 = this.handleInputChange1.bind(this);
+        this.handleInputChange2 = this.handleInputChange2.bind(this);
     }
 
     callbackFunction = (childStart, childEnd) => {
@@ -38,6 +44,24 @@ class Query extends Component {
         this.setState({ start: cStart })
     }
 
+    handleInputChange1 = (event) => {
+        if (event.target.value == '') {
+            this.setState({ sourceIp: null })
+        }
+        else {
+            this.setState({ sourceIp: event.target.value })
+        }
+    }
+
+    handleInputChange2(event) {
+        if (event.target.value == '') {
+            this.setState({ destinationIp: null })
+        }
+        else {
+            this.setState({ destinationIp: event.target.value })
+        }
+    }
+
     whenSubmit() {
         const queryRequest = {
             startDate: this.state.start.format(),
@@ -47,7 +71,6 @@ class Query extends Component {
         };
         queries(queryRequest)
             .then(response => {
-                //console.log(response)
                 this.setState({ listArray: response, word:'FirstQuery' })
                 console.log(this.state.listArray)
                 notification.success({
@@ -110,7 +133,6 @@ class Query extends Component {
                     message: 'Log Database App',
                     description: "The result of our query",
                 });
-                //this.props.history.push("/login");
             }).catch(error => {
                 notification.error({
                     message: 'Log Database App',
@@ -119,8 +141,33 @@ class Query extends Component {
             });
         console.log(this.state.start.format())
         console.log('ThirdQuery')
-        //console.log(this.state.end.format())
-        //console.log(this.state.type)
+    }
+
+    whenSubmit3() {
+        const searchIpRequest = {
+            sourceIp: this.state.sourceIp,
+            destinationIp: this.state.destinationIp
+        };
+
+        searchIp(searchIpRequest)
+            .then(response => {
+                this.setState({ searchIpArray: response})
+                console.log(this.state.searchIpArray)
+                notification.success({
+                    message: 'Log Database App',
+                    description: "The result of our query",
+                });
+            }).catch(error => {
+                notification.error({
+                    message: 'Log Database App',
+                    description: error.message || 'Sorry! Something went wrong. Please try again!'
+                });
+            });
+
+            //console.log(this.state.sourceIp)
+            //console.log(this.state.destinationIp)
+            //console.log('FourthQuery')
+            this.setState({ sourceIp: null, destinationIp:null })
     }
 
     render() {
@@ -148,6 +195,13 @@ class Query extends Component {
                     <Button type="primary" onClick={this.whenSubmit2}>Submit</Button>
                     <br />
                     <br />
+                    <h2>Search by Source IP or Destination IP</h2>
+                    <Input style ={{width: "200px"}} placeholder="Source IP" onChange={this.handleInputChange1}/>
+                    <Input style ={{width: "200px"}} placeholder="Destination IP" onChange={this.handleInputChange2}/>
+                    <br />
+                    <Button type="primary" onClick={this.whenSubmit3}>Submit</Button>
+                    <br />
+                    <br />
                     <br />
                     <div className="results">
                         <ul>
@@ -158,6 +212,16 @@ class Query extends Component {
                                 else {
                                     return <li key={ index }>{name[0]}{' '} {name[1]}{' '}{name[2]}</li>;
                                 }
+                            })}
+                        </ul>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <div className="search">
+                        <ul>
+                            {this.state.searchIpArray.map(function(name, index){
+                                return <li key={ index }>{name}</li>;
                             })}
                         </ul>
                     </div>
