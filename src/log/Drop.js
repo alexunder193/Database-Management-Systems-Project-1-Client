@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Menu, Dropdown, Button, Icon, message} from 'antd';
+import React from 'react';
+import { Menu, Dropdown, Button, Icon} from 'antd';
 
 class Drop extends React.Component {
 

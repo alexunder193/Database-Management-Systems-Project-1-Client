@@ -1,6 +1,6 @@
 //const { DatePicker } = antd;
 import { DatePicker } from 'antd';
-import React, { Component } from 'react';
+import React from 'react';
 
 class DateRangeStart extends React.Component {
     state = {
@@ -59,7 +59,7 @@ class DateRangeStart extends React.Component {
     };
 
     render() {
-        const { startValue, endValue, endOpen } = this.state;
+        const { startValue} = this.state;
         return (
             <div>
                 <DatePicker
@@ -77,5 +77,4 @@ class DateRangeStart extends React.Component {
     }
 }
 
-//ReactDOM.render(<DateRange />, mountNode);
 export default DateRangeStart;

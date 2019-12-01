@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { queries, searchIp } from '../util/APIUtils';
-import LoadingIndicator from '../common/LoadingIndicator';
-import { Button, Icon, notification, Input } from 'antd';
+import { Button, notification, Input } from 'antd';
 import { withRouter } from 'react-router-dom';
 import DateRange from './DateRange';
 import DateRangeStart from './DateRangeStart';
@@ -77,7 +76,6 @@ class Query extends Component {
                     message: 'Log Database App',
                     description: "The result of our query",
                 });
-                //this.props.history.push("/login");
             }).catch(error => {
                 notification.error({
                     message: 'Log Database App',
@@ -87,7 +85,6 @@ class Query extends Component {
         console.log(this.state.start.format())
         console.log(this.state.end.format())
         console.log('FirstQuery')
-        //console.log(this.state.type)
     }
 
     whenSubmit1() {
@@ -163,10 +160,6 @@ class Query extends Component {
                     description: error.message || 'Sorry! Something went wrong. Please try again!'
                 });
             });
-
-            //console.log(this.state.sourceIp)
-            //console.log(this.state.destinationIp)
-            //console.log('FourthQuery')
             this.setState({ sourceIp: null, destinationIp:null })
     }
 

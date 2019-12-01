@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom'
-import { queries } from '../util/APIUtils';
-import LoadingIndicator  from '../common/LoadingIndicator';
-import { Button, Icon, notification, Input} from 'antd';
+import { Button, notification, Input} from 'antd';
 import { withRouter } from 'react-router-dom';
 import DateRangeStart from './DateRangeStart';
-import Drop from './Drop';
-import { InputNumber } from 'antd';
 import Dynamic from './Dynamic';
 import Dynamic1 from './Dynamic1';
 import { insert } from '../util/APIUtils';
@@ -143,7 +138,6 @@ class Insert extends Component {
 
 
     render() {
-      //  if (this.props.isAuthenticated) {
             return (
                 <div className="insert-container">
                     <br/>
@@ -177,16 +171,6 @@ class Insert extends Component {
 
                 </div>
             );
-       // }
-        // else {
-        //     return (
-        //         <div className="query-container">
-        //             <h2 style={{position: 'fixed', top:'50%', left:'30%'}}>
-        //                 Please Log in or Sign Up in order to use the Database Application.
-        //             </h2>
-        //         </div>   
-        //     );
-        // }
     }
 }
 
